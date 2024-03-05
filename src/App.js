@@ -2,9 +2,10 @@ import "./App.css";
 import { useState } from "react";
 import MultipleSelect from "./components/MultipleSelect";
 import Book from "./Book";
+import Timing from "./components/Timing";
 
 function App() {
-  const [inputValues, setInputValues] = useState({});
+  // const [inputValues, setInputValues] = useState({});
   const [counter, setCounter] = useState(0);
   const [selectedbook, setBoook] = useState();
 
@@ -13,35 +14,25 @@ function App() {
     console.log(counter);
   };
 
-  const handleOnChange = (e) => {
-    const abc = {};
-    abc[e.target.className] = e.target.value;
-    setInputValues({ ...inputValues, ...abc });
-  };
-
-  // console.log(Book[0].name);
-
   return (
     <>
       {console.log(selectedbook)}
-      <div className="App">Study Management</div>
-      <h1> Create New Plan</h1>
+      <div className="App">
+        {" "}
+        <h1> Study Management</h1>
+      </div>
+      <h2> Create New Plan</h2>
+
+      <hr />
+
       <div>
         <h3> Title of Your Plan</h3>
         <input name="title" />
       </div>
 
       <div>
-        {/* <hr /> */}
+        <hr />
         <h3> Select Books</h3>
-
-        {Object.keys(inputValues).map((c) => {
-          return (
-            <>
-              <p>{inputValues[c]}</p>
-            </>
-          );
-        })}
 
         {Array.from(Array(counter)).map((c, index) => {
           return (
@@ -64,8 +55,16 @@ function App() {
             </>
           );
         })}
-        <button onClick={handleClick}>+</button>
+
+        <button onClick={handleClick}>Add +</button>
       </div>
+      <hr />
+      <div>
+        <h3> Select Timing</h3>
+
+        <Timing />
+      </div>
+      <hr />
     </>
   );
 }
