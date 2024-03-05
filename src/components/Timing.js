@@ -1,4 +1,5 @@
 import { useState } from "react";
+import TimePicker from "react-bootstrap-time-picker";
 
 const Timing = () => {
   const [counter, setCounter] = useState({
@@ -15,6 +16,33 @@ const Timing = () => {
     setCounter({ ...counter, [day]: counter[day] + 1 });
     console.log(counter);
   };
+
+  let arr = Array.from(
+    {
+      length: (24 * 60) / 5,
+    },
+    (v, i) => {
+      let h = Math.floor((i * 5) / 60);
+      let m = i * 5 - h * 60;
+      //convert to 12 hours time
+      //pad zero to minute
+      if (m < 10) {
+        m = "0" + m;
+      }
+      let label = "AM";
+      if (h > 12) {
+        label = "PM";
+        h -= 12;
+      }
+      if (h === 0) {
+        h = 12;
+      }
+      return h + ":" + m + " " + label;
+    }
+  );
+
+  console.log(arr);
+
   return (
     <>
       <table style={{ width: "70%" }}>
@@ -34,7 +62,20 @@ const Timing = () => {
                     return (
                       <>
                         <select>
-                          <option>hi</option>
+                          <option value="" disabled selected>
+                            From time
+                          </option>
+                          {arr.map((t) => {
+                            return <option>{t}</option>;
+                          })}
+                        </select>
+                        <select>
+                          <option value="" disabled selected>
+                            To time
+                          </option>
+                          {arr.map((t) => {
+                            return <option>{t}</option>;
+                          })}
                         </select>
                         <br />
                       </>
