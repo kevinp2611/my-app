@@ -3,6 +3,8 @@ import { useState } from "react";
 import MultipleSelect from "./components/MultipleSelect";
 import Book from "./Book";
 import Timing from "./components/Timing";
+import Datepiker from "./components/Datepiker";
+import Button from "@mui/material/Button";
 
 function App() {
   // const [inputValues, setInputValues] = useState({});
@@ -65,6 +67,18 @@ function App() {
         <Timing />
       </div>
       <hr />
+      <div>
+        <h3>Duration</h3>
+        start Date:
+        <Datepiker />
+        {""}
+        End Date:
+        <Datepiker />
+      </div>
+      <hr />
+      <div className="App">
+        <button> save</button>
+      </div>
     </>
   );
 }
