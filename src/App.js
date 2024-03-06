@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useState} from "react";
 import "./App.css";
 
 import Timing from "./components/Timing";
@@ -57,79 +57,6 @@ function App() {
       <button onClick={calculatedEndDate}>calculate</button>
     </div>
   );
-
-  // const [counter, setCounter] = useState(0);
-  // // const [selectedBooks, setSelectedBooks] = useState([]);
-
-  // const handleAddBook = () => {
-  //   setCounter(counter + 1);
-  // };
-  // const handleBook = () => {
-  //   setCounter(counter + 1);
-  // };
-
-  // const handleBookChange = (e) => {
-  //   const bookName = e.target.value;
-  //   setSelectedBooks((prevSelectedBooks) => [...prevSelectedBooks, bookName]);
-  // };
-
-  // return (
-  //   <div className="App">
-  //     <h1>Study Management</h1>
-  //     <h2>Create New Plan</h2>
-  //     <hr />
-
-  //     <div>
-  //       <h3>Title of Your Plan</h3>
-  //       <input name="title" />
-  //     </div>
-
-  //     <div>
-  //       <hr />
-  //       <h3>Select Books</h3>
-
-  //       {[...Array(counter)].map((_, index) => (
-  //         <div key={index}>
-  //           <label>Name: </label>
-  //           <select name="selectedbook" onChange={handleBookChange}>
-  //             {Object.values(Book).map((book) => (
-  //               <option key={book.name} value={book.name}>
-  //                 {book.name}
-  //               </option>
-  //             ))}
-  //           </select>
-  //           <label>Chapter: </label>
-  //           <MultipleSelect selectedbook={selectedBooks} onChange={handleBook}/>
-  //           <br />
-  //         </div>
-  //       ))}
-  //       <button onClick={handleAddBook}>Add +</button>
-  //     </div>
-
-  //     <hr />
-
-  //     <div>
-  //       <h3>Select Timing</h3>
-  //       <Timing />
-  //     </div>
-
-  //     <hr />
-
-  //     <div>
-  //       <h3>Duration</h3>
-  //       <label>Start Date:</label>
-  //       <Datepiker />
-  //       <label>End Date:</label>
-  //       <Datepiker />
-  //     </div>
-
-  //     <hr />
-
-  //     <div>
-  //       <button>Save</button>
-  //     </div>
-  //   </div>
-  // );
 }
 
 export default App;

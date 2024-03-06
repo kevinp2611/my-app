@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Book from "./Book";
 
 const calculateEndDate = (selectedBooks, timings, startDate) => {
@@ -21,17 +20,7 @@ const calculateEndDate = (selectedBooks, timings, startDate) => {
 
   const totaltime = toHoursAndMinutes(sum);
 
-  const daysInMilliseconds = {
-    sunday: 0,
-    monday: 1,
-    tuesday: 2,
-    wednesday: 3,
-    thursday: 4,
-    friday: 5,
-    saturday: 6,
-  };
-
-  let totalDuration = 0;
+  let totalDuration = { hours: "", minutes: "" };
   const parseTime = (timeString) => {
     const match = timeString.match(/(\d{1,2}):(\d{2})\s?(AM|PM)/i);
     if (!match) {
@@ -50,9 +39,7 @@ const calculateEndDate = (selectedBooks, timings, startDate) => {
     } else if (period.toUpperCase() === "AM" && hours === 12) {
       hours = 0;
     }
-
-    const titolmin = minutes + hours * 60;
-    return Math.floor(titolmin / 60);
+    return { hours, minutes };
   };
 
   const weekday = [
@@ -67,40 +54,44 @@ const calculateEndDate = (selectedBooks, timings, startDate) => {
 
   let noofDay = 0;
 
-  //  { while (totalDuration < totaltime.hours) {
-  //     let day = weekday[copystartDate.getDay()];
-  //     if (timings.hasOwnProperty(day)) {
-  //       timings[day].forEach(({ start, end }) => {
-  //         const startTime = parseTime(start);
-  //         const endTime = parseTime(end);
-
-  //         console.log("hiii");
-  //         totalDuration = totalDuration + (endTime - startTime);
-  //         noofDay = noofDay + 1;
-  //       });
-  //       copystartDate = copystartDate + 1;
-  //     }
-  //   }
-
-  let copytotaltime = totaltime.hours;
   for (const day in timings) {
     console.log(day);
     if (timings.hasOwnProperty(day)) {
       timings[day].forEach(({ start, end }) => {
         const startTime = parseTime(start);
         const endTime = parseTime(end);
+
         if (startTime && endTime) {
           console.log("hiii");
-          totalDuration = totalDuration + (endTime - startTime);
+          if (
+            startTime.minutes < endTime.minutes &&
+            startTime.hours < endTime.hours
+          ) {
+            totalDuration.minutes += endTime.minutes - startTime.minutes;
+            totalDuration.hours += endTime.hours - startTime.hours;
+          }
+          if (
+            startTime.minutes > endTime.minutes &&
+            startTime.hours > endTime.hours
+          ) {
+            totalDuration.minutes += startTime.minutes - endTime.minutes;
+            totalDuration.hours += startTime.hours - endTime.hours;
+          }
+          // totalDuration = totalDuration + (endTime - startTime);
           // noofDay = noofDay + 1;
+          console.log(totalDuration);
         }
       });
     }
   }
   console.log(totalDuration);
-  console.log(totaltime.hours);
+  console.log(totaltime);
 
-  var totalweek = Math.floor(totaltime.hours / totalDuration);
+  const Totaltimeinminutes = totaltime.hours * 60 + totaltime.minutes;
+  const Totaldurationinminutes =
+    Number(totalDuration.hours) * 60 + Number(totalDuration.minutes);
+
+  var totalweek = Math.floor(Totaltimeinminutes / Totaldurationinminutes);
 
   console.log(totalweek);
 
@@ -108,83 +99,38 @@ const calculateEndDate = (selectedBooks, timings, startDate) => {
 
   for (let i = 0; i < totalweek; i++)
     for (const day in weekday) {
-      if (copytotalduration < totaltime.hours) {
+      if (copytotalduration.hours < totaltime.hours) {
         noofDay = noofDay + 1;
       }
       if (timings.hasOwnProperty(day)) {
         timings[day].forEach(({ start, end }) => {
           const startTime = parseTime(start);
           const endTime = parseTime(end);
-          if (startTime && endTime && copytotalduration < totaltime.hours) {
-            copytotalduration = copytotalduration + (endTime - startTime);
+          if (
+            startTime &&
+            endTime &&
+            copytotalduration.hours < totaltime.hours
+          ) {
+            if (
+              startTime.minutes < endTime.minutes &&
+              startTime.hours < endTime.hours
+            ) {
+              copytotalduration.minutes += endTime.minutes - startTime.minutes;
+              copytotalduration.hours += endTime.hours - startTime.hours;
+            }
+            if (
+              startTime.minutes > endTime.minutes &&
+              startTime.hours > endTime.hours
+            ) {
+              copytotalduration.minutes += startTime.minutes - endTime.minutes;
+              copytotalduration.hours += startTime.hours - endTime.hours;
+            }
           }
         });
       }
     }
 
   console.log(noofDay);
-  // const totalDays = Math.floor(totalDuration / totaltime);
-
-  // });
-  // const newArray = Book.filter((item) => {
-  //   return time.includes(String(item.id));
-  // });
-  // const total = Book[selectedBooks.book_id]?.chapters.map((item) => {
-  //   return console.log(item);
-  // });
-  // Book.filter
-  //  item.id.includes(time)
-  //   const daysInMilliseconds = {
-  //     sunday: 0,
-  //     monday: 1,
-  //     tuesday: 2,
-  //     wednesday: 3,
-  //     thursday: 4,
-  //     friday: 5,
-  //     saturday: 6,
-  //   };
-  //   let totalDuration = 0;
-  //   for (const day in timings) {
-  //     if (timings.hasOwnProperty(day)) {
-  //       timings[day].forEach(({ start, end }) => {
-  //         const startTime = parseTime(start, startDate, daysInMilliseconds[day]);
-  //         const endTime = parseTime(end, startDate, daysInMilliseconds[day]);
-  //         if (startTime && endTime) {
-  //           totalDuration =totalDuration + endTime - startTime;
-  //         }
-  //       });
-  //     }
-  //   }
-  //   // Adjust the end date based on reading speed
-  //   const totalMinutes = totalDuration / (1000 * 60); // Convert milliseconds to minutes
-  //   const wordsRead = totalMinutes * readingSpeed;
-  //   const estimatedReadingTimeInMilliseconds = (wordsRead / 50) * 60 * 1000; // Convert words to minutes and then to milliseconds
-  //   const adjustedEndDate = new Date(startDate.getTime() + estimatedReadingTimeInMilliseconds);
-  //   return adjustedEndDate;
-  // };
-  // const parseTime = (timeString, startDate, dayOffset) => {
-  //   const match = timeString.match(/(\d{1,2}):(\d{2})\s?(AM|PM)/i);
-  //   if (!match) {
-  //     console.error(`Invalid time format for ${timeString}`);
-  //     return null;
-  //   }
-  //   let [_, hours, minutes, period] = match;
-  //   hours = parseInt(hours);
-  //   minutes = parseInt(minutes);
-  //   if (isNaN(hours) || isNaN(minutes)) {
-  //     console.error(`Invalid time format for ${timeString}`);
-  //     return null;
-  //   }
-  //   if (period.toUpperCase() === 'PM' && hours !== 12) {
-  //     hours += 12;
-  //   } else if (period.toUpperCase() === 'AM' && hours === 12) {
-  //     hours = 0;
-  //   }
-  //   const time = new Date(startDate);
-  //   time.setDate(time.getDate() + dayOffset);
-  //   time.setHours(hours, minutes, 0, 0);
-  //   return time;
-
   const d = new Date(startDate.getTime());
   let day = d.getDay() + 1;
   console.log("day", day);

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Timing = ({value,onChange}) => {
+const Timing = ({ value, onChange }) => {
   const [counter, setCounter] = useState({
     sunday: 0,
     monday: 0,
@@ -29,7 +29,10 @@ const Timing = ({value,onChange}) => {
 
   const handleTimeChange = (day, index, selectedTime, timeType) => {
     const newSelectedTimes = { ...selectedTimes };
-    newSelectedTimes[day][index] = { ...newSelectedTimes[day][index], [timeType]: selectedTime };
+    newSelectedTimes[day][index] = {
+      ...newSelectedTimes[day][index],
+      [timeType]: selectedTime,
+    };
     setSelectedTimes(newSelectedTimes);
     calculateTimingData();
   };
@@ -58,7 +61,11 @@ const Timing = ({value,onChange}) => {
         const formattedHour = String(hour).padStart(2, "0");
         const formattedMinute = String(m).padStart(2, "0");
         const time = `${formattedHour}:${formattedMinute} ${ampm}`;
-        timeOptions.push(<option key={time} value={time}>{time}</option>);
+        timeOptions.push(
+          <option key={time} value={time}>
+            {time}
+          </option>
+        );
       }
     }
     return timeOptions;
@@ -82,7 +89,9 @@ const Timing = ({value,onChange}) => {
                   <div key={index}>
                     <select
                       name={`fromtime-${day}-${index}`}
-                      onChange={(e) => handleTimeChange(day, index, e.target.value, "start")}
+                      onChange={(e) =>
+                        handleTimeChange(day, index, e.target.value, "start")
+                      }
                     >
                       <option value="" disabled selected>
                         From time
@@ -91,12 +100,17 @@ const Timing = ({value,onChange}) => {
                     </select>
                     <select
                       name={`totime-${day}-${index}`}
-                      onChange={(e) => handleTimeChange(day, index, e.target.value, "end")}
+                      onChange={(e) =>
+                        handleTimeChange(day, index, e.target.value, "end")
+                      }
                     >
                       <option value="" disabled selected>
                         To time
                       </option>
-                      {generateTimeOptions(selectedTimes[day][index]?.start.slice(0, 2), selectedTimes[day][index]?.start.slice(3, 5))}
+                      {generateTimeOptions(
+                        selectedTimes[day][index]?.start.slice(0, 2),
+                        selectedTimes[day][index]?.start.slice(3, 5)
+                      )}
                     </select>
                     <br />
                   </div>
@@ -113,8 +127,6 @@ const Timing = ({value,onChange}) => {
           </tr>
         </tbody>
       </table>
-
-      
     </div>
   );
 };
