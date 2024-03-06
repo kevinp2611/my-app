@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 
 import Timing from "./components/Timing";
@@ -7,12 +7,10 @@ import BookSelect from "./components/BookSelect";
 import TitleInput from "./components/TitleInput";
 import SaveButton from "./components/SaveButton";
 import DatePicker from "./components/DatePicker";
-import calculateEndDate  from "./utils";
+import calculateEndDate from "./utils";
 
 function App() {
-
-
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState("");
   const [selectedBooks, setSelectedBooks] = useState([]);
   const [timings, setTimings] = useState({});
   const [startDate, setStartDate] = useState(null);
@@ -29,50 +27,36 @@ function App() {
     };
 
     // Save data to localStorage
-    localStorage.setItem('planData', JSON.stringify(data));
+    localStorage.setItem("planData", JSON.stringify(data));
   };
-
- 
 
   const handleStartDateChange = (date) => {
     setStartDate(date);
     // Calculate end date based on start date and selected timings
-    const calculatedEndDate = calculateEndDate(selectedBooks,timings,startDate);
-    setEndDate(calculatedEndDate);
   };
 
-console.log(timings)
-return(
-  <div className="App">
-  <h1>Study Management</h1>
-  <TitleInput value={title} onChange={setTitle} />
-  <BookSelect value={selectedBooks} onChange={setSelectedBooks} />
-  <Timing value={timings} onChange={setTimings} />
-  <DatePicker label="Start Date" value={startDate} onChange={handleStartDateChange} />
-  <DatePicker label="End Date" value={endDate} disabled />
-  <SaveButton onClick={saveData} />
-</div>
-)
+  const calculatedEndDate = () => {
+    const end = calculateEndDate(selectedBooks, timings, startDate);
+    setEndDate(end);
+  };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  console.log(timings);
+  return (
+    <div className="App">
+      <h1>Study Management</h1>
+      <TitleInput value={title} onChange={setTitle} />
+      <BookSelect value={selectedBooks} onChange={setSelectedBooks} />
+      <Timing value={timings} onChange={setTimings} />
+      <DatePicker
+        label="Start Date"
+        value={startDate}
+        onChange={handleStartDateChange}
+      />
+      <DatePicker label="End Date" value={endDate} disabled />
+      <SaveButton onClick={saveData} />
+      <button onClick={calculatedEndDate}>calculate</button>
+    </div>
+  );
 
   // const [counter, setCounter] = useState(0);
   // // const [selectedBooks, setSelectedBooks] = useState([]);
@@ -149,4 +133,3 @@ return(
 }
 
 export default App;
-
