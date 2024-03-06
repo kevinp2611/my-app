@@ -61,7 +61,7 @@ export default function MultipleSelect({ selectedbook }) {
   //   console.log("multople", selecteditem[0]["chapters"]);
   return (
     <div>
-      <FormControl sx={{ m: 1, width: 150 }}>
+      <FormControl sx={{ m: 1, width: 200 }}>
         <InputLabel id="demo-multiple-name-label">Name</InputLabel>
         <Select
           labelId="demo-multiple-name-label"
