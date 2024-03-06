@@ -32,16 +32,12 @@ function App() {
     localStorage.setItem('planData', JSON.stringify(data));
   };
 
-  // function calculateEndDate(startDate, timings) {
-  //   // Calculate end date based on start date and selected timings
-  //   // Logic to calculate end date goes here
-  //   return startDate; // Placeholder, replace with actual calculation
-  // }
+ 
 
   const handleStartDateChange = (date) => {
     setStartDate(date);
     // Calculate end date based on start date and selected timings
-    const calculatedEndDate = calculateEndDate(date, timings,50);
+    const calculatedEndDate = calculateEndDate(selectedBooks,timings,startDate);
     setEndDate(calculatedEndDate);
   };
 

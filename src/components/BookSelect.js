@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTheme } from "@mui/material/styles";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
@@ -30,6 +30,9 @@ function getStyles(name, personName, theme) {
 function BookSelect({ value, onChange }) {
   const theme = useTheme();
 
+
+  const [totalWords,setTotalWords] = useState(0)
+
   const handleAddBook = () => {
     onChange((prevBooks) => [
       ...prevBooks,
@@ -55,6 +58,8 @@ function BookSelect({ value, onChange }) {
       // Otherwise, split the value by comma
       chapterIds = e.target.value.split(',').map(id => id.toString().trim());
     }
+
+    setTotalWords(totalWords);
     onChange((prevBooks) => {
       const updatedBooks = [...prevBooks];
       updatedBooks[bookIndex].chapters_id = chapterIds; // Assign the array of chapter IDs
