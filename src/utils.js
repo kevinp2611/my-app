@@ -1,26 +1,23 @@
+
 import Book from "./Book";
 
 const calculateEndDate = (selectedBooks, timings, startDate) => {
-  var time = [];
-  const Timetaken = selectedBooks.map((item) => {
-    return item.chapters_id.map((ite) => {
-      return time.push(Book[item.book_id - 1].chapters[ite - 1].no_of_words);
-    });
-  });
-
-  var sum = time.reduce((accumulator, currentValue) => {
-    return accumulator + currentValue;
+  const totalWords = selectedBooks.reduce((total, item) => {
+    return total + item.chapters_id.reduce((sum, ite) => {
+      return sum + Book[item.book_id - 1].chapters[ite - 1].no_of_words;
+    }, 0);
   }, 0);
 
-  function toHoursAndMinutes(totalMinutes) {
+  const toHoursAndMinutes = (totalMinutes) => {
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
     return { hours, minutes };
   }
 
-  const totaltime = toHoursAndMinutes(sum);
+  const totaltime = toHoursAndMinutes(totalWords);
 
-  let totalDuration = { hours: "", minutes: "" };
+  let totalDuration = { hours: 0, minutes: 0 };
+
   const parseTime = (timeString) => {
     const match = timeString.match(/(\d{1,2}):(\d{2})\s?(AM|PM)/i);
     if (!match) {
@@ -52,92 +49,59 @@ const calculateEndDate = (selectedBooks, timings, startDate) => {
     "Saturday",
   ];
 
-  let noofDay = 0;
-
   for (const day in timings) {
-    console.log(day);
     if (timings.hasOwnProperty(day)) {
       timings[day].forEach(({ start, end }) => {
         const startTime = parseTime(start);
         const endTime = parseTime(end);
 
         if (startTime && endTime) {
-          console.log("hiii");
-          if (
-            startTime.minutes < endTime.minutes &&
-            startTime.hours < endTime.hours
-          ) {
-            totalDuration.minutes += endTime.minutes - startTime.minutes;
-            totalDuration.hours += endTime.hours - startTime.hours;
+          let interval = (endTime.hours * 60 + endTime.minutes) - (startTime.hours * 60 + startTime.minutes);
+
+          if (interval < 0) {
+            interval += 24 * 60; // Add 24 hours for overnight period
           }
-          if (
-            startTime.minutes > endTime.minutes &&
-            startTime.hours > endTime.hours
-          ) {
-            totalDuration.minutes += startTime.minutes - endTime.minutes;
-            totalDuration.hours += startTime.hours - endTime.hours;
-          }
-          // totalDuration = totalDuration + (endTime - startTime);
-          // noofDay = noofDay + 1;
-          console.log(totalDuration);
+
+          totalDuration.hours += Math.floor(interval / 60);
+          totalDuration.minutes += interval % 60;
         }
       });
     }
   }
-  console.log(totalDuration);
-  console.log(totaltime);
 
-  const Totaltimeinminutes = totaltime.hours * 60 + totaltime.minutes;
-  const Totaldurationinminutes =
-    Number(totalDuration.hours) * 60 + Number(totalDuration.minutes);
+  const totaltimeInMinutes = totaltime.hours * 60 + totaltime.minutes;
+  const totalDurationInMinutes = totalDuration.hours * 60 + totalDuration.minutes;
 
-  var totalweek = Math.floor(Totaltimeinminutes / Totaldurationinminutes);
+  const totalWeeks = Math.floor(totaltimeInMinutes / totalDurationInMinutes);
 
-  console.log(totalweek);
+  let noofDay = 0;
+  let copyTotalDuration = { ...totalDuration };
 
-  let copytotalduration = totalDuration;
-
-  for (let i = 0; i < totalweek; i++)
-    for (const day in weekday) {
-      if (copytotalduration.hours < totaltime.hours) {
-        noofDay = noofDay + 1;
+  for (let i = 0; i < totalWeeks; i++) {
+    for (const day of weekday) {
+      if (copyTotalDuration.hours < totaltime.hours) {
+        noofDay++;
       }
       if (timings.hasOwnProperty(day)) {
         timings[day].forEach(({ start, end }) => {
           const startTime = parseTime(start);
           const endTime = parseTime(end);
-          if (
-            startTime &&
-            endTime &&
-            copytotalduration.hours < totaltime.hours
-          ) {
-            if (
-              startTime.minutes < endTime.minutes &&
-              startTime.hours < endTime.hours
-            ) {
-              copytotalduration.minutes += endTime.minutes - startTime.minutes;
-              copytotalduration.hours += endTime.hours - startTime.hours;
-            }
-            if (
-              startTime.minutes > endTime.minutes &&
-              startTime.hours > endTime.hours
-            ) {
-              copytotalduration.minutes += startTime.minutes - endTime.minutes;
-              copytotalduration.hours += startTime.hours - endTime.hours;
-            }
+          if (startTime && endTime && copyTotalDuration.hours < totaltime.hours) {
+            copyTotalDuration.minutes += endTime.minutes - startTime.minutes;
+            copyTotalDuration.hours += endTime.hours - startTime.hours;
           }
         });
       }
     }
-
-  console.log(noofDay);
+  }
+console.log(totalDuration)
+console.log(totaltime)
+console.log(totalWeeks)
+console.log(noofDay)
   const d = new Date(startDate.getTime());
-  let day = d.getDay() + 1;
-  console.log("day", day);
+  const day = d.getDay() + 1;
 
-  var newDate = new Date(
-    startDate.getTime() + (noofDay - day) * 24 * 60 * 60 * 1000
-  );
+  const newDate = new Date(startDate.getTime() + (noofDay - day) * 24 * 60 * 60 * 1000);
 
   return newDate;
 };

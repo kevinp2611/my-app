@@ -56,7 +56,7 @@ const Timing = ({ value, onChange }) => {
       const mStart = h === startHour ? startMinute : 0;
       for (let m = mStart; m < 60; m += 15) {
         let hour = h % 12;
-        hour = hour === 0 ? 12 : hour; // Convert 0 to 12
+        hour = hour === 0 ? 0 : hour; // Convert 0 to 12
         const ampm = h < 12 ? "AM" : "PM";
         const formattedHour = String(hour).padStart(2, "0");
         const formattedMinute = String(m).padStart(2, "0");
@@ -109,7 +109,7 @@ const Timing = ({ value, onChange }) => {
                       </option>
                       {generateTimeOptions(
                         selectedTimes[day][index]?.start.slice(0, 2),
-                        selectedTimes[day][index]?.start.slice(3, 5)
+                     String(  Number(selectedTimes[day][index]?.start.slice(3, 5)) + 15)
                       )}
                     </select>
                     <br />

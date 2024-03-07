@@ -114,7 +114,7 @@ function BookSelect({ value, onChange }) {
         </div>
       ))}
       <button onClick={handleAddBook}>Add Book</button>
-      <pre>{JSON.stringify(value, null, 2)}</pre>
+   
     </div>
   );
 }
